@@ -111,22 +111,46 @@
             100% { transform: translateY(-120vh) translateX(0) rotate(0deg) scale(0.6); }
         }
 
+        /* --- Color Changing Outline Animation --- */
+        @keyframes rotateBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glowing-border {
+            position: relative;
+            z-index: 0;
+            border-radius: 20px;
+        }
+
+        .glowing-border::before {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            border-radius: 22px;
+            animation: rotateBorder 20s linear infinite;
+            opacity: 0.8;
+        }
+
         /* Glassmorphism Card */
         .glass-card {
-            background: rgba(20, 20, 20, 0.65);
+            background: rgba(20, 20, 20, 0.75);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
             text-align: center;
             pointer-events: auto;
             transition: opacity 0.5s ease, transform 0.5s ease;
             max-width: 85%;
             width: 380px;
-            position: relative;
-            overflow: hidden;
+            overflow: visible; /* Changed to visible for glow */
             animation: cardEntrance 1s ease-out;
         }
 
@@ -163,7 +187,7 @@
             position: relative;
             width: 320px;
             height: 220px;
-            margin-top: 20px;
+            margin-top: 60px; /* Moved down slightly to fit overlapping letter */
             margin-bottom: 20px;
             perspective: 1000px;
             z-index: 50;
@@ -180,7 +204,7 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.6);
             z-index: 5;
             border: 2px solid #FFD700;
-            overflow: hidden;
+            /* overflow: hidden; Removed to allow glow */
         }
 
         .envelope-pattern {
@@ -268,14 +292,14 @@
             top: 10px; left: 15px;
             width: 290px; height: 200px;
             background: #fffdf5; /* Cream paper */
-            padding: 15px 20px; /* Reduced padding */
+            padding: 15px 20px;
             border-radius: 2px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.8s ease 0.6s, z-index 0.1s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 1s ease-in-out 0.6s, z-index 0.1s;
             z-index: 6;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Better spacing */
+            justify-content: space-between;
             align-items: center;
             font-family: 'Great Vibes', cursive;
             color: #5d4037;
@@ -298,8 +322,9 @@
         }
 
         .envelope-wrapper.open .letter {
-            transform: translateY(-130px);
-            z-index: 12;
+            /* Move letter much higher to overlap envelope completely */
+            transform: translateY(-180px);
+            z-index: 12; /* Stays above envelope parts */
         }
         
         .sender-msg {
@@ -322,7 +347,7 @@
         
         .sender-msg.fade-out { 
             opacity: 0; 
-            pointer-events: none; /* Prevent blocking */
+            pointer-events: none; 
         }
 
         /* Typography & Animations */
@@ -332,11 +357,16 @@
             font-weight: 700;
             color: var(--gold-primary);
             text-align: center;
+            /* STRICT CENTERING */
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             opacity: 0;
             transition: all 0.8s ease;
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
             width: 100%;
+            z-index: 60; 
         }
 
         .intro-sub {
@@ -381,23 +411,7 @@
             transform: scale(0.95);
         }
 
-        /* --- Fully Animated Colorful Input Box --- */
-        .input-wrapper {
-            position: relative;
-            padding: 3px;
-            border-radius: 12px;
-            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-            background-size: 400%;
-            animation: rainbowBorder 6s linear infinite;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
-            margin-bottom: 24px;
-        }
-
-        @keyframes rainbowBorder {
-            0% { background-position: 0%; }
-            100% { background-position: 400%; }
-        }
-
+        /* --- Input Styling --- */
         .interactive-input {
             width: 100%;
             border: none;
@@ -411,6 +425,7 @@
             letter-spacing: 1px;
             outline: none;
             text-align: center;
+            margin-bottom: 20px;
         }
         
         .interactive-input:focus {
@@ -604,7 +619,7 @@
             .glass-card { width: 90%; padding: 1.5rem; }
             .envelope-wrapper { width: 280px; height: 200px; }
             .letter { width: 250px; height: 180px; top: 10px; left: 15px; padding: 10px 15px; }
-            .envelope-wrapper.open .letter { transform: translateY(-110px); }
+            .envelope-wrapper.open .letter { transform: translateY(-160px); } /* Adjusted for mobile */
             /* Adjust flap sizes for mobile envelope */
             .envelope::after { border-left-width: 140px; border-right-width: 140px; }
             .flap { border-left-width: 140px; border-right-width: 140px; border-top-width: 110px; }
@@ -626,7 +641,7 @@
     <div id="ui-layer">
         
         <!-- Intro Animation Sequence -->
-        <div id="intro-container" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div id="intro-container" class="absolute inset-0 pointer-events-none">
             <div id="intro-1" class="intro-text">
                 <span class="intro-sub">Season of</span>Harvest
             </div>
@@ -635,8 +650,8 @@
             </div>
         </div>
 
-        <!-- Setup Card -->
-        <div id="setup-card" class="glass-card">
+        <!-- Setup Card with Glowing Border -->
+        <div id="setup-card" class="glass-card glowing-border">
             <div class="mb-4 animate-pop-in" style="animation-delay: 0.2s;">
                 <div style="font-size: 3.5rem;">🪁</div>
             </div>
@@ -645,8 +660,8 @@
             
             <div class="animate-pop-in" style="animation-delay: 0.8s;">
                 <!-- Animated Input Wrapper -->
-                <div class="input-wrapper">
-                    <input type="text" id="nameInput" placeholder="Enter Your Name" class="interactive-input">
+                <div class="glowing-border" style="margin-bottom: 20px;">
+                    <input type="text" id="nameInput" placeholder="Enter Your Name" class="interactive-input" style="margin-bottom: 0;">
                 </div>
             </div>
             
@@ -659,7 +674,7 @@
         <div id="envelope-layer">
             <div class="sender-msg" id="envelope-msg">A Special Wish For You</div>
             
-            <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope-wrapper glowing-border" id="envelopeWrapper">
                 <div class="envelope">
                     <div class="envelope-pattern"></div>
                     <div class="flap"></div>
@@ -718,6 +733,9 @@
     <div class="footer-credit">
         Made with <span class="heart-icon">❤️</span> by <a href="https://www.webfxgen.in/" target="_blank">WebFXGen</a>
     </div>
+
+    <!-- Buy Me A Coffee Widget -->
+    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="webfxgen" data-description="Support me on Buy me a coffee!" data-message="Support my creative work! Your coffee helps me create beautiful digital experiences and keep doing what I love. Every bit counts! ✨ 💝 Thank you!" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 
     <script>
         /**
@@ -968,14 +986,15 @@
             currentName = name;
             setupCard.classList.add('hidden-card');
 
+            // Force center position while scaling
             intro1.style.opacity = '1';
-            intro1.style.transform = 'scale(1.1)';
+            intro1.style.transform = 'translate(-50%, -50%) scale(1.1)';
             
             setTimeout(() => {
                 intro1.style.opacity = '0';
                 setTimeout(() => {
                     intro2.style.opacity = '1';
-                    intro2.style.transform = 'scale(1.1)';
+                    intro2.style.transform = 'translate(-50%, -50%) scale(1.1)';
                     bgText.style.opacity = '0'; 
                     
                     setTimeout(() => {
