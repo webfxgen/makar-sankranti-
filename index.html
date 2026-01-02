@@ -1121,13 +1121,26 @@
         
         window.shareTo = (platform) => {
             const url = window.location.href.split('?')[0] + '?name=' + encodeURIComponent(currentName);
-            const text = `Received a Royal Makar Sankranti wish from ${currentName}! 🪁`;
             
-            if(platform === 'whatsapp') window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`);
-            if(platform === 'facebook') window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
-            if(platform === 'copy') {
-                navigator.clipboard.writeText(url);
-                alert('Link copied!');
+            // ✨ BEAUTIFUL SURPRISE MESSAGE
+            const message = `✨ ${currentName} has sent you a beautiful surprise! 🎁\n\nTap the blue link to open your *Golden Envelope* and see the magic 👇\n${url}`;
+            
+            if(platform === 'whatsapp') {
+                // Encodes the whole message including the link
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`);
+            }
+            else if(platform === 'facebook') {
+                // Facebook strictly uses the meta tags of the page for preview, but we send the URL
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+            }
+            else if(platform === 'copy') {
+                // Copies the full engaging message to clipboard
+                navigator.clipboard.writeText(message).then(() => {
+                    alert('Surprise message copied! Paste it to your friends.');
+                }).catch(() => {
+                    // Fallback if clipboard fails
+                    prompt("Copy this link:", message);
+                });
             }
         }
 
